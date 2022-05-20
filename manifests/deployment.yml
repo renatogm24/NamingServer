@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: banknamingserver
+  labels:
+    app: banknamingserver
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      service: banknamingserver
+  template:
+    metadata:
+      labels:
+        app: banknamingserver
+        service: banknamingserver
+    spec:
+      containers:
+        - name: banknamingserver
+          image: banknamingserver.azurecr.io/banknamingserver:v1
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8761
+              protocol: TCP
+          env:
+            - name: ASPNETCORE_URLS
+              value: http://+:8761
+            - name: WebApiBaseAddress
+              value: http://webapi
